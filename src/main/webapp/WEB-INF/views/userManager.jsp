@@ -81,19 +81,20 @@
             $("#question_id").val(questionid);
         }
     </script>
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
 </head>
 <body>
 <div class="table-responsive">
     <form class="form-inline" role="form" action="<%=basePath%>user/selectAll" method="post" id="myform">
-        <div style="margin-left: 80px;">
-            姓名：<input type="text" name="name" id="name" value="${userInfo1.name}" class="form-control"
-                      style="width: 120px;">
-            账号：<input type="text" name="loginName" id="loginName" value="${userInfo1.loginName}" class="form-control"
-                      style="width: 120px;">
-            <input type="button" onclick="findData();" class="btn btn-info" value="查询"/>
-            <input type="button" onclick="clearP();" class="btn btn-info" value="清空"/>
-            <input type="button" data-toggle="modal" data-target="#addModal" class="btn btn-info" value="新增"/>
-        </div>
+<%--        <div style="margin-left: 80px;">--%>
+<%--            姓名：<input type="text" name="name" id="name" value="${userInfo1.name}" class="form-control"--%>
+<%--                      style="width: 120px;">--%>
+<%--            账号：<input type="text" name="loginName" id="loginName" value="${userInfo1.loginName}" class="form-control"--%>
+<%--                      style="width: 120px;">--%>
+<%--            <input type="button" onclick="findData();" class="btn btn-info" value="查询"/>--%>
+<%--            <input type="button" onclick="clearP();" class="btn btn-info" value="清空"/>--%>
+<%--            <input type="button" data-toggle="modal" data-target="#addModal" class="btn btn-info" value="新增"/>--%>
+<%--        </div>--%>
         <hr style="margin-top: 10px;"/>
         <div style="margin-left: 20px;">
             <table class="table table-hover">
@@ -132,7 +133,7 @@
                                 </c:if>
 
                                 <c:if test="${question.status=='已回复'}">
-                                    <button type="button" class="btn btn-success" onclick="review('${user.id }')">查看</button>
+                                    <button type="button" class="btn btn" onclick="review('${user.id }')">已回复</button>
                                 </c:if>
                             </td>
                         </tr>
@@ -140,9 +141,9 @@
                 </c:if>
                 </tbody>
             </table>
-            <div>
-                <jsp:include page="/common/page.jsp"/>
-            </div>
+<%--            <div>--%>
+<%--                <jsp:include page="/common/page.jsp"/>--%>
+<%--            </div>--%>
         </div>
     </form>
 </div>

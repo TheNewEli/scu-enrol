@@ -191,7 +191,7 @@ public class Util {
             //请求
             try {
                 HttpPost httpPost = new HttpPost("https://api.weixin.qq.com/tcb/invokecloudfunction?access_token=" + access_token + "&env=" + env + "&name=" + functionName);
-                httpPost.setEntity(new StringEntity("{\"openid\":\"" +q.get_openid() +"\"}"));
+                httpPost.setEntity(new StringEntity("{\"openid\":\"" + q.get_openid() + "\"}"));
                 client = HttpClients.createDefault();
                 response = client.execute(httpPost);
             } catch (IOException e) {
@@ -214,10 +214,10 @@ public class Util {
                 e.printStackTrace();
             }
 
-            System.out.println("asdf"+result);
+            System.out.println("asdf" + result);
             JSONArray jsonValues = JSON.parseObject(result).getJSONObject("resp_data").getJSONArray("data");
             JSONObject studentInfo = new JSONObject();
-            if(jsonValues.size()>0){
+            if (jsonValues.size() > 0) {
                 studentInfo = jsonValues.getJSONObject(0);
                 q.setSutdent_id(studentInfo.getString("_id"));
                 q.setArt_n_sicence(studentInfo.getString("art_n_sicence"));
@@ -239,14 +239,14 @@ public class Util {
         String functionName = "reply";
 
 
-        System.out.println(reply+"^^^^^^^^"+question_id);
+        System.out.println(reply + "^^^^^^^^" + question_id);
         CloseableHttpClient client = null;
         CloseableHttpResponse response = null;
 
         //请求
         try {
             HttpPost httpPost = new HttpPost("https://api.weixin.qq.com/tcb/invokecloudfunction?access_token=" + access_token + "&env=" + env + "&name=" + functionName);
-            httpPost.setEntity(new StringEntity("{\"reply\":\"" + reply + "\",\"question_id\":\"" + question_id + "\"}","UTF-8"));
+            httpPost.setEntity(new StringEntity("{\"reply\":\"" + reply + "\",\"question_id\":\"" + question_id + "\"}", "UTF-8"));
             client = HttpClients.createDefault();
             response = client.execute(httpPost);
         } catch (IOException e) {
@@ -270,5 +270,46 @@ public class Util {
             e.printStackTrace();
         }
 
+
+        templetMesg(reply, question_id);
+    }
+
+    private static void templetMesg(String reply, String question_id) {
+        String access_token = getAccessToken();
+        String env = "scu-undergraduate-tu0da";
+        String functionName = "openapi";
+        String action = "sendTemplateMessage";
+
+
+        System.out.println(reply);
+        CloseableHttpClient client = null;
+        CloseableHttpResponse response = null;
+
+        //请求
+        try {
+            HttpPost httpPost = new HttpPost("https://api.weixin.qq.com/tcb/invokecloudfunction?access_token=" + access_token + "&env=" + env + "&name=" + functionName);
+            httpPost.setEntity(new StringEntity("{\"reply\":\"" + reply + "\",\"action\":\"" + action + "\",\"question_id\":\"" + question_id + "\"}", "UTF-8"));
+            client = HttpClients.createDefault();
+            response = client.execute(httpPost);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        //获取结果
+        String result = "";
+        try {
+            result = EntityUtils.toString(response.getEntity(), "UTF-8");
+            System.out.println(result);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        //关闭资源
+        try {
+            client.close();
+            response.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

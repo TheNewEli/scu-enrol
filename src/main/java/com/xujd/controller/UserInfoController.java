@@ -21,9 +21,39 @@ public class UserInfoController {
     private UserInfoService userInfoService;
 
     @RequestMapping("/reply")
-    public String reply(String reply,String question_id){
+    public String reply(String reply,String question_id,Model model){
         Util.reply(reply,question_id);
-        return "/main";
+
+        //获取所有数据数量
+        PageUtil pageP = new PageUtil();
+        UserInfo userInfo = new UserInfo();
+        int count = Util.getTotalQuestionCount();
+        PageUtil page = new PageUtil();
+        //pageSize默认为15  currentPage默认为1
+        page.setPageSize(pageP.getPageSize());
+        page.setCurrentPage(pageP.getCurrentPage());
+
+        List<Question> questionList = Util.getQuestionList(page.getStartRow(),page.getEndRow()-page.getStartRow());
+//        //mysql中用 --这里用limit a,b 去分页，数据量比较大时不推荐limit
+//        //a表示起始行，b表示数量，如 limit 0,5 表示查5条数据，从数据库中的第一条查起
+//        userInfo.setStartRow(page.getStartRow());
+//        userInfo.setEndRow(page.getEndRow() - page.getStartRow());
+//        //分页查询数据
+//        List<UserInfo> userList = userInfoService.selectUserByParams(userInfo);
+//        //设置所有用户数量  如果有查询条件则以查询结果数量为准，不然为所有数量
+//        if ((userInfo.getName() != null && !"".equals(userInfo.getName()))
+//                || (userInfo.getLoginName() != null && !"".equals(userInfo.getLoginName()))) {
+//            page.setTotalRecord(userList.size());
+//        } else {
+//            page.setTotalRecord(count);
+//        }
+        model.addAttribute("page1", page);
+        //这里也可以通过page.setObjectLists(userList)传数据到页面
+        model.addAttribute("userList","null");
+        model.addAttribute("userInfo1", userInfo);
+        model.addAttribute("questionList", questionList);
+
+        return "/userManager";
     }
 
     /**
@@ -51,7 +81,7 @@ public class UserInfoController {
         }
         model.addAttribute("msg", msg);
         System.out.println("login:  " + Util.verifyTeacher(userInfo.getName(), userInfo.getPassword()));
-        return "/login";
+        return "/userManager";
     }
 
     /**
